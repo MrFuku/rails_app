@@ -27,13 +27,13 @@ class FollowingTest < ActionDispatch::IntegrationTest
   end
 
   test "should follow a user the standard way" do
-    assert_difference '@user.following.count', 1 do
+    assert_difference ['@user.following.count', 'Notification::Relationship.count'], 1 do
       post relationships_path, params: { followed_id: @other.id }
     end
   end
 
   test "should follow a user with Ajax" do
-    assert_difference '@user.following.count', 1 do
+    assert_difference ['@user.following.count', 'Notification::Relationship.count'], 1 do
       post relationships_path, xhr: true, params: { followed_id: @other.id }
     end
   end
