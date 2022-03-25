@@ -6,4 +6,4 @@ one:
   user: lana
   type: Notification::Relationship
   checked: false
-
+  meta: "{\"other_followers_count\":0}"
