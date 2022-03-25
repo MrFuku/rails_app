@@ -47,4 +47,25 @@ class NotificationTest < ActiveSupport::TestCase
       end
     end
   end
+
+  class Notification::WelcomeTest < self
+    def setup
+      @notification_welcome = notifications(:two)
+    end
+  
+    test "should be valid" do
+      assert @notification_welcome.valid?
+    end
+
+    test "#message: return welcome message" do
+      assert_equal @notification_welcome.message, "初回ログインありがとうございます。"
+    end
+
+    test ".send_welcome_notification: add a notification" do
+      user = users(:user_1)
+      assert_difference ['Notification::Welcome.count'], 1 do
+        notification = Notification::Welcome.send_welcome_notification(user)
+      end
+    end
+  end
 end

@@ -7,3 +7,10 @@ one:
   type: Notification::Relationship
   checked: false
   meta: "{\"other_followers_count\":0}"
+
+two:
+  notifiable_type: Welcome
+  user: lana
+  type: Notification::Welcome
+  checked: false
+  
