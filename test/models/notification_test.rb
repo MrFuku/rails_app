@@ -32,5 +32,19 @@ class NotificationTest < ActiveSupport::TestCase
       assert_equal notification.notifiable, relationship
       assert_equal notification.user, relationship.followed
     end
+
+    test ".send_new_relationship_notification: do not add If last notification is within 5 minutes" do
+      notified_user = @notification_relationship.notifiable.followed
+      other_relationhip = Relationship.create(follower: users(:user_1), followed: notified_user)
+      notification = nil
+      assert_difference ->{ Notification::Relationship.count } => 0, ->{ @notification_relationship.reload.other_followers_count } => 1 do
+        Notification::Relationship.send_new_relationship_notification(other_relationhip)
+      end
+
+      @notification_relationship.update(updated_at: 6.minutes.ago)
+      assert_difference ->{ Notification::Relationship.count } => 1 do
+        Notification::Relationship.send_new_relationship_notification(other_relationhip)
+      end
+    end
   end
 end

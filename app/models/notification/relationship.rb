@@ -28,6 +28,11 @@ class Notification::Relationship < Notification
     def send_new_relationship_notification(relationship)
       followed = relationship.followed
 
+      recent_notification = followed.notifications.relationships.find_by(updated_at: 5.minutes.ago..)
+      if recent_notification
+        return recent_notification.increment_other_followers_count
+      end
+
       followed.notifications.create(
         notifiable: relationship,
         notifiable_type: relationship.class,
